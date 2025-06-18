@@ -6,7 +6,7 @@ const Sequelize = require('sequelize');
 const process = require('process');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
+const config = require(path.join(__dirname, '..', 'config', 'config.json'))[env];
 const db = {};
 
 let sequelize;
@@ -37,7 +37,23 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+
+db.connectAndSync = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Connection to the database has been established successfully.');
+    await sequelize.sync({ force: false });
+    console.log('Database synced successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database or sync models:', error);
+    process.exit(1); 
+  }
+};
+
+
 
 module.exports = db;
