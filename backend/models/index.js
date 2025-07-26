@@ -4,17 +4,21 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const process = require('process');
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require(path.join(__dirname, '..', 'config', 'config.json'))[env];
+const basename = path.basename(__filename); 
 const db = {};
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+let sequelize = new Sequelize( 
+  
+    process.env.DB_NAME,
+    process.env.DB_USER,
+    process.env.DB_PASSWORD || '',
+    {
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT,
+        dialect: 'mysql',
+        logging: false
+    }
+);
 
 fs
   .readdirSync(__dirname)
@@ -37,23 +41,7 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
-
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-
-
-db.connectAndSync = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('Connection to the database has been established successfully.');
-    await sequelize.sync({ force: false });
-    console.log('Database synced successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database or sync models:', error);
-    process.exit(1); 
-  }
-};
-
-
 
 module.exports = db;

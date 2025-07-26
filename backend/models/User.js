@@ -32,14 +32,18 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.ENUM('admin', 'employee', 'donor', 'patient'),
             allowNull: false
         },
-        medicalLicense: {
+        medicalLicenseFile: {
             type: DataTypes.STRING,
             allowNull: true  
         },
     }, {
         timestamps: true 
     });
-
+     User.prototype.toJSON = function () {
+    const values = Object.assign({}, this.get());
+    delete values.password;
+    return values;
+};
 
     return User; 
 };
