@@ -1,0 +1,16 @@
+# Node.js
+node_modules/
+.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+/dist/
+/build/
+coverage/
+uploads/
+
+# Specific for MySQL/Database (if any generated files)
+*.sqlite
+*.db
+*.sql_dump
