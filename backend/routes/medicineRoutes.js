@@ -19,3 +19,4 @@ router.post('/admin/approve/:id', authMiddleware.authenticate, authMiddleware.au
 router.post('/admin/reject/:id', authMiddleware.authenticate, authMiddleware.authorize('admin'), medicineController.rejectDonation);
 
 module.exports = router;
+
